@@ -12,7 +12,7 @@ public class Server {
 			System.out.println("O Server está ouvindo a porta " + port);
 			while (true) {
 				Socket socket = ss.accept();
-				System.out.println("Novo cliente conectado");
+				System.out.println("Novo cliente conectado ");
 				InputStream inputStream = socket.getInputStream();
 				DataInputStream dataInputStream = new DataInputStream(inputStream);
 				OutputStream outputStream = socket.getOutputStream();
@@ -21,8 +21,10 @@ public class Server {
 				String message = dataInputStream.readUTF();
 				System.out.println("User: " + message);
 
-				String menssage = "Mensagem recebida";
-				dataOutputStream.writeUTF(menssage);
+				Scanner Smsg = new Scanner(System.in);
+				System.out.println("Digite uma mensage: ");
+				String messageServer = Smsg.nextLine();
+				dataOutputStream.writeUTF(messageServer);
 
 				dataOutputStream.close();
 				dataInputStream.close();
