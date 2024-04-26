@@ -4,7 +4,6 @@ import java.net.*;
 import java.util.Scanner;
 
 public class Client {
-
 	public static void main(String[] args) throws IOException {
 		String hostname = "localhost";
 		Scanner entry = new Scanner(System.in);
