@@ -4,34 +4,40 @@ import java.net.*;
 import java.util.Scanner;
 
 public class Client {
-	public static void main(String[] args) throws IOException {
-		String hostname = "localhost";
-		Scanner entry = new Scanner(System.in);
-		int port;
-		System.out.println("Digite a porta que deseja se conectar: ");
-		port = entry.nextInt();
-		try (Socket socket = new Socket(hostname, port)) {
-			System.out.println("Conectado ao server");
+	public static void main(String[] args) {
+		new Client();
+	}
 
-			OutputStream outputStream = socket.getOutputStream();
-			InputStream inputStream = socket.getInputStream();
-			DataInputStream dataInputStream = new DataInputStream(inputStream);
-			DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+	private Socket socket;
+	private DataOutputStream OutputStream;
+	private Scanner menssage;
 
-			while (true){
-				Scanner Cmsg = new Scanner(System.in);
-				System.out.println("Digite uma mensage: ");
-				String messageClient = Cmsg.nextLine();
-				dataOutputStream.writeUTF(messageClient);
-
-				String messageServer = dataInputStream.readUTF();
-				System.out.println("Server: " + messageServer);
-			}
-
-		} catch (UnknownHostException e) {
-			System.out.println("Server não encontrado: " + e.getMessage());
+	public Client(){
+		try{
+			socket = new Socket("localhost", Server.porta);
+			OutputStream = new DataOutputStream(socket.getOutputStream());
+			menssage = new Scanner(System.in);
+			System.out.println("Bem vindo! Diga algo: ");
+			writeMenssage();
 		} catch (IOException e) {
-			System.out.println("I/O error " + e.getMessage());
+			e.printStackTrace();
 		}
+
+	}
+
+	private void writeMenssage() throws IOException {
+		String line = "";
+		while (!line.equals(Server.EndConection)){
+			line = menssage.nextLine();
+			OutputStream.writeUTF(line);
+		}
+		close();
+	}
+
+	private void close() throws IOException {
+		socket.close();
+		OutputStream.close();
+		menssage.close();
 	}
 }
+
