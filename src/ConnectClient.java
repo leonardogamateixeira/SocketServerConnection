@@ -10,14 +10,14 @@ public class ConnectClient {
 		this.clientSocket = clientSocket;
 		this.id = id;
 		try {
-			System.out.println("User"+id+ "entrou");
+			System.out.println("User "+id+" entrou");
 			this.InputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void ReadMessages(){
+	public void ReadMessages() throws IOException {
 		String line = "";
 		while (!line.equals(Server.EndConection)){
 			try {
@@ -25,10 +25,10 @@ public class ConnectClient {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//String nickname = Client.nick.next
 			System.out.println("User "+id+ ": " +line);
+			serverConfirm();
 		}
-		System.out.println("User "+id+ "saiu");
+		System.out.println("User "+id+ " saiu");
 	}
 
 	public void close(){
@@ -38,5 +38,11 @@ public class ConnectClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void serverConfirm() throws IOException {
+		OutputStream outputStream = Server.clientSocket.getOutputStream();
+		DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+		dataOutputStream.writeUTF(Server.serverMenssage);
 	}
 }

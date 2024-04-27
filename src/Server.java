@@ -7,9 +7,10 @@ public class Server {
 	}
 
 	private ServerSocket server;
-	private Socket clientSocket;
+	public static Socket clientSocket;
 	public static int porta = 2004;
 	public static String EndConection = "/end";
+	public static String serverMenssage = "Mensagem enviada!";
 	private int id = 0;
 
 	public Server() {
@@ -25,14 +26,16 @@ public class Server {
 
 	private void iniConnetions() throws IOException {
 		clientSocket = server.accept();
-
 		if (clientSocket.isConnected())
 		new Thread(()->{
-			id++;
-			ConnectClient client = new ConnectClient(clientSocket, id);
-			client.ReadMessages();
-			client.close();
+			try {
+				id++;
+				ConnectClient client = new ConnectClient(clientSocket, id);
+				client.ReadMessages();
+				client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}).start();
-
 	}
 }
